@@ -31,6 +31,12 @@ from string import ascii_letters
 # Это API должно создавать новый уникальный токен в блокчейне 
 # и записывать параметры запроса в БД.
 class TokensCreateView(TemplateView):
+    template_name = 'tokens/create.html'
+    def get(self, request, *args, **kwargs):
+        form = TokensForm()
+        return render(request, 'tokens/create.html', {'form' : form})
+
+
     def post(self, request):
         form = TokensForm(request.POST)
         
@@ -41,14 +47,43 @@ class TokensCreateView(TemplateView):
         # реализовать проверку на уникальность?
         unique_hash = ''.join(choice(ascii_letters + ''.join(map(str, range(0,10)))) for i in range(20))
         
+        # файл с приватным ключом 
+        # в формате мнемонической фразы
+        encrypted_key = settings.PRIVATE_KEY
+
+        # The use of the Mnemonic features of Account is disabled 
+        # by default until its API stabilizes.
+        # To use these features, please enable them by running
+        w3.eth.account.enable_unaudited_hdwallet_features()
+        
+        # create private_key
+        account = w3.eth.account.from_mnemonic(encrypted_key)
+        
+        # nonce
+        nonce = w3.eth.get_transaction_count(settings.ME)  
+        
+        # mint
+        unicorn_txn = contract_instance.functions.mint(
+            settings.ME,
+            unique_hash,
+            settings.RANDOM_MEDIA).buildTransaction({
+        'from'  : settings.ME,
+        'nonce' : nonce})
+        
+
+        # create signature
+        signed = w3.eth.account.sign_transaction(unicorn_txn, account.privateKey)
+        
         # выполнение транзакции и получение ответа
-        tx_hash = contract_instance.functions.mint(settings.ME, request.POST['owner'], settings.RANDOM_MEDIA).transact({'from' : settings.ME})
- 
+        hash_transaction = w3.eth.send_raw_transaction(signed.rawTransaction)  
+
+
         if form.is_valid():
             
+            # save params
             req = form.save(commit=False)
             req.unique_hash = unique_hash
-            req.tx_hash = tx_hash
+            req.tx_hash = hash_transaction
             req.save()
             
         return render(request, 'tokens/create.html', {'form' : form})

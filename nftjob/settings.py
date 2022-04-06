@@ -23,6 +23,8 @@ ADDRESS_CONTRACT = env('ADDRESS_CONTRACT')
 ME = env('ME')
 ABI = env('ABI')
 RANDOM_MEDIA = "https://cdnn21.img.ria.ru/images/148839/96/1488399659_0:0:960:960_600x0_80_0_1_e38b72053fffa5d3d7e82d2fe116f0b3.jpg"
+PRIVATE_KEY = env('PRIVATE_KEY')
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
