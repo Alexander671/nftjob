@@ -43,7 +43,7 @@ class TokensCreateView(TemplateView):
         
         # выполнение транзакции и получение ответа
         tx_hash = contract_instance.functions.mint(settings.ME, request.POST['owner'], settings.RANDOM_MEDIA).transact({'from' : settings.ME})
-
+ 
         if form.is_valid():
             
             req = form.save(commit=False)
