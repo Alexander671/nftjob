@@ -61,5 +61,5 @@ Some edge-cases examples are available on the `examples` folder.
 
 ## Authors
 
-* **Alexander Matveev** - *Initial work* - [1tayH](https://github.com/Alexander671)
+* **Alexander Matveev** - *Initial work* - [Alexander671](https://github.com/Alexander671)
 
