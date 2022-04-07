@@ -32,6 +32,7 @@ from string import ascii_letters
 # и записывать параметры запроса в БД.
 class TokensCreateView(TemplateView):
     template_name = 'tokens/create.html'
+    
     def get(self, request, *args, **kwargs):
         form = TokensForm()
         return render(request, 'tokens/create.html', {'form' : form})
@@ -64,9 +65,9 @@ class TokensCreateView(TemplateView):
         
         # mint
         unicorn_txn = contract_instance.functions.mint(
-            settings.ME,
+            request.POST['owner'],
             unique_hash,
-            settings.RANDOM_MEDIA).buildTransaction({
+            request.POST['media_url']).buildTransaction({
         'from'  : settings.ME,
         'nonce' : nonce})
         
