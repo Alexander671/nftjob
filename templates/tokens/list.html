@@ -1,5 +1,33 @@
-{% for token in tokens %}
-<div class="list-item">
-        {{ token.owner }}
-</div>
+{% block content %}
+
+
+--------------------------------------------------------<p>
+{%for token in tokens %}
+
+Кошелек владельца: {{ token.owner }} <br>
+Хеш транзакции: {{ token.tx_hash }} <br>
+URL: {{ token.media_url }} <br> 
+Уникальный, случайный хеш: {{ token.unique_hash }} <br><br>
+
+
 {% endfor %}
+{% include "pagination.html" with page=cards %} 
+--------------------------------------------------------<p>
+
+{% for i in length%}
+    {% if page == i %}
+    <b> <a href="?page={{i}}"> Блок {{i}}</a>  </b> 
+    {% else %}
+        <a href="?page={{i}}"> Блок {{i}}</a>  
+    {% endif %}
+
+{% endfor %}
+
+
+
+{% for error in form.errors %}
+  {{error}}
+    <p>
+{% endfor %}
+
+{% endblock %}
