@@ -1,5 +1,6 @@
 
 
+from math import ceil
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.views.generic import TemplateView
@@ -12,7 +13,7 @@ from .models import Tokens
 
 from web3 import Web3
 from web3.middleware import geth_poa_middleware
-
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger  
 
 import environ
 
@@ -96,8 +97,18 @@ class TokensCreateView(TemplateView):
 class TokensListView(TemplateView):
     def get(self, request, *args, **kwargs):
         tokens = Tokens.objects.all()
+        length = ceil(len(tokens) / 2)
+        paginator = Paginator(tokens, 2)
+        page = request.GET.get('page')  
+        try:  
+            cards = paginator.page(page)  
+        except PageNotAnInteger:  
+            # Если страница не является целым числом, поставим первую страницу  
+            cards = paginator.page(1)
+        except EmptyPage:  
+            cards = paginator.page(paginator.num_pages)  
         
-        return render(request, 'tokens/list.html', {'tokens' : tokens})
+        return render(request, 'tokens/list.html', {'tokens' : tokens, 'cards' : cards})
 
 # /tokens/total_supply
 # Метод запроса: GET
