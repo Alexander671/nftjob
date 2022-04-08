@@ -16,17 +16,22 @@ These instructions will get you a copy of the project up and running on your loc
 1. run without Docker
 2. run with Docker 
 
+## .env file
 
-### Dependencies
-
-Install  if you do not have it already installed, using `pip`:
+For correct work you need to create .env file in ~/PROJECT_DIR/nftjob/.env
+with the following content:
 
 ```
-pip install requests
+WEB3_INFURA_PROJECT_ID=<endoint infura>
+ADDRESS_CONTRACT=<address contract>
+ME=<your address>
+ABI=<ABI of contract>
+PRIVATE_KEY=<private key your address>
 ```
 
+## Build Without Docker
 
-### Usage
+### Git
 
 Clone the repository
 ```
@@ -38,22 +43,49 @@ Navigate into the `nftjob` directory
 cd nftjob
 ```
 
-Run the script
+### Dependencies
+
+Install, using `pip`:
 
 ```
+pip install -r requirements.txt
+```
+
+
+### Usage
+```
+python3 manage.py makemigrations
+python3 manage.py migrate
 python3 manage.py runserver
 ```
 
 ## Build Using Docker
 
+### Git
+
+Clone the repository
+```
+git clone https:github.com/Alexander671/nftjob
+```
+
+Navigate into the `nftjob` directory
+```
+cd nftjob
+```
+
+### Usage
+
 1. Build the image
 
-`docker build -t noisy .`
+`docker build .`
 
+2. Сompiling the image with the team
 
-2. Create the container and run:
+`docker-compose build`
 
-`docker run -it noisy --config config.json`
+3. Run container:
+
+`docker-compose up -d`
 
 ## Some examples
 
