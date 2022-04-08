@@ -7,7 +7,8 @@ from django.views.generic import TemplateView
 from drf_yasg.views import get_schema_view  # new
 from drf_yasg import openapi  # new
 from rest_framework import permissions
-from django.conf.urls import url
+
+from nftjob.view import redirect_view
 from . import api
 
 schema_view = get_schema_view(  # new
@@ -27,6 +28,7 @@ schema_view = get_schema_view(  # new
 
 
 urlpatterns = [
+    path('', redirect_view),
     path('tokens', api.TokensListAPIView.as_view(), name='api_tokens'),
     path('admin/', admin.site.urls),
     path('tokens/', include('tokens.urls')),
